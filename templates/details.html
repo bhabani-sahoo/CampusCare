@@ -1,0 +1,208 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Complaint Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h4 class="fw-bold text-navy mb-0">Complaint Details</h4>
+        <a href="{% url 'profile' %}" class="btn btn-outline-secondary rounded-pill btn-sm mt-2 mt-sm-0">
+            <i class="bi bi-arrow-left"></i> Back to Complaints
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-navy px-3 py-2 rounded-pill fs-6">{{ complaint.complaint_id }}</span>
+                    </div>
+                    <div>
+                        {% if complaint.status == "Pending" %}
+                            <span class="badge badge-pending px-3 py-2 fs-6"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                        {% elif complaint.status == "In Progress" %}
+                            <span class="badge badge-progress px-3 py-2 fs-6"><i class="bi bi-arrow-repeat me-1"></i>In Progress</span>
+                        {% elif complaint.status == "Resolved" %}
+                            <span class="badge badge-resolved px-3 py-2 fs-6"><i class="bi bi-check-circle me-1"></i>Resolved</span>
+                        {% elif complaint.status == "Rejected" %}
+                            <span class="badge badge-rejected px-3 py-2 fs-6"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+                        {% else %}
+                            <span class="badge bg-secondary px-3 py-2 fs-6">{{ complaint.status }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-navy border-bottom pb-2 mb-3">Complaint Information</h5>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Category</div>
+                        <div class="col-sm-8 fw-bold">{{ complaint.complaint_catagory }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Description</div>
+                        <div class="col-sm-8">{{ complaint.description }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Student</div>
+                        <div class="col-sm-8">{{ complaint.student.username }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Created On</div>
+                        <div class="col-sm-8">{{ complaint.created_at|date:"F d, Y h:i A" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Last Updated</div>
+                        <div class="col-sm-8">{{ complaint.updated_at|date:"F d, Y h:i A" }}</div>
+                    </div>
+
+                    <h5 class="fw-bold text-navy border-bottom pb-2 mb-3 mt-4">Resolution Details</h5>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Remark</div>
+                        <div class="col-sm-8">
+                            {% if complaint.remark %}
+                                <div class="bg-light p-3 rounded border-start border-4 border-info">{{ complaint.remark }}</div>
+                            {% else %}
+                                <span class="text-muted fst-italic">No Remark</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted fw-500">Satisfaction</div>
+                        <div class="col-sm-8">
+                            {% if complaint.satisfaction == 'Satisfied' %}
+                                <span class="text-success fw-bold"><i class="bi bi-emoji-smile"></i> Satisfied</span>
+                            {% elif complaint.satisfaction == 'Non-satisfied' %}
+                                <span class="text-danger fw-bold"><i class="bi bi-emoji-frown"></i> Not Satisfied</span>
+                            {% else %}
+                                <span class="text-muted">{{ complaint.satisfaction }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attachments Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold text-navy mb-0"><i class="bi bi-paperclip"></i> Attachments</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-muted fw-500 mb-2">Attached File</h6>
+                            {% if complaint.file %}
+                                <a href="{{ complaint.file.url }}" target="_blank" class="btn btn-outline-teal d-inline-flex align-items-center gap-2">
+                                    <i class="bi bi-file-earmark-arrow-down"></i> View/Download File
+                                </a>
+                            {% else %}
+                                <p class="text-muted fst-italic mb-0">No File Uploaded</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted fw-500 mb-2">Attached Image</h6>
+                            {% if complaint.image %}
+                                <a href="{{ complaint.image.url }}" target="_blank">
+                                    <img src="{{ complaint.image.url }}" class="img-thumbnail rounded" style="max-height: 150px; object-fit: contain;">
+                                </a>
+                            {% else %}
+                                <p class="text-muted fst-italic mb-0">No Image Uploaded</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold text-navy mb-0"><i class="bi bi-lightning-charge"></i> Actions</h5>
+                </div>
+                <div class="card-body p-4 d-flex flex-column gap-3">
+                    <a href="{% url 'download_complaint_pdf' complaint.id %}" class="btn btn-success d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-file-pdf"></i> Download PDF
+                    </a>
+                    
+                    <a href="{% url 'edit_complaint' complaint.id %}" class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-pencil"></i> Edit Complaint
+                    </a>
+                    
+                    {% if complaint.status == "Resolved" %}
+                        <button type="button" class="btn btn-outline-info d-flex align-items-center justify-content-center gap-2 py-2" data-bs-toggle="modal" data-bs-target="#overviewModal">
+                            <i class="bi bi-chat-left-text"></i> Provide Overview Feedback
+                        </button>
+                    {% endif %}
+                    
+                    <hr class="text-muted">
+                    <button type="button" class="btn btn-outline-danger d-flex align-items-center justify-content-center gap-2 py-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Delete Complaint
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overview Modal -->
+{% if complaint.status == "Resolved" %}
+<div class="modal fade" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold text-navy" id="overviewModalLabel">Complaint Overview Feedback</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-4">Please provide your satisfaction level for the resolution of this complaint.</p>
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger p-2 small mb-3">Please correct the errors below.</div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label fw-500 text-navy">Satisfaction Level</label>
+                        {{ form.satisfaction }}
+                    </div>
+                </div>
+                <div class="modal-footer border-top bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% if form.errors %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('overviewModal'));
+        myModal.show();
+    });
+</script>
+{% endif %}
+{% endif %}
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom bg-danger text-white">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <p class="fs-5 text-navy mb-1">Are you sure you want to delete this complaint?</p>
+                <p class="text-muted small">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-top justify-content-center bg-light">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_complaint' complaint.id %}" class="btn btn-danger px-4">Yes, Delete It</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}My Profile & Complaints{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    
+    <div class="row g-4 mb-5">
+        <!-- PROFILE CARD -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex align-items-center gap-3">
+                    <div class="bg-navy text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-person-fill fs-3"></i>
+                    </div>
+                    <h5 class="mb-0 fw-bold text-navy">Student Profile</h5>
+                </div>
+                <div class="card-body p-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Username</span>
+                            <span class="fw-bold">{{ student_detail.1 }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Email</span>
+                            <span>{{ student_detail.0 }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Roll Number</span>
+                            <span>{{ student_detail.2|default:"N/A" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Batch</span>
+                            <span>{{ student_detail.3|default:"N/A" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Gender</span>
+                            <span>{{ student_detail.4|default:"N/A" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted fw-500">Hostel Status</span>
+                            {% if student_detail.5 %}
+                                <span class="badge bg-teal rounded-pill">Hosteler</span>
+                            {% else %}
+                                <span class="badge bg-secondary rounded-pill">Day Scholar</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <a href="{% url 'change_password' %}" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-key"></i> Change Password
+                        </a>
+                        <form action="{% url 'logout' %}" method="post" class="w-100 m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY COMPLAINTS TABLE -->
+        <div class="col-lg-8" id="complaints">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-navy d-flex align-items-center gap-2">
+                        <i class="bi bi-list-task text-teal"></i> My Complaints
+                    </h5>
+                    <a href="{% url 'create_complaint' %}" class="btn btn-primary btn-sm rounded-pill px-3">
+                        <i class="bi bi-plus"></i> New
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    {% if Complains %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="ps-4 fw-500">ID</th>
+                                    <th class="fw-500">Category</th>
+                                    <th class="fw-500" style="max-width: 200px;">Description</th>
+                                    <th class="fw-500">Status</th>
+                                    <th class="pe-4 text-end fw-500">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in Complains %}
+                                <tr>
+                                    <td class="ps-4 fw-bold text-navy">{{ complaint.complaint_id }}</td>
+                                    <td>{{ complaint.complaint_catagory }}</td>
+                                    <td class="text-muted text-truncate" style="max-width: 200px;">
+                                        {{ complaint.description }}
+                                    </td>
+                                    <td>
+                                        {% if complaint.status == "Pending" %}
+                                            <span class="badge badge-pending"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                        {% elif complaint.status == "In Progress" %}
+                                            <span class="badge badge-progress"><i class="bi bi-arrow-repeat me-1"></i>In Progress</span>
+                                        {% elif complaint.status == "Resolved" %}
+                                            <span class="badge badge-resolved"><i class="bi bi-check-circle me-1"></i>Resolved</span>
+                                        {% elif complaint.status == "Rejected" %}
+                                            <span class="badge badge-rejected"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ complaint.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <a href="{% url 'c_detail' complaint.id %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle text-muted mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-inbox fs-1"></i>
+                        </div>
+                        <h6 class="text-muted fw-bold">No complaints found</h6>
+                        <p class="text-muted small mb-4">You haven't submitted any complaints yet.</p>
+                        <a href="{% url 'create_complaint' %}" class="btn btn-primary rounded-pill px-4">Submit a Complaint</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

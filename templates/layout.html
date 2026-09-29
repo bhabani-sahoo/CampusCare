@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}College Complaint Portal{% endblock %} | CampusCare
+    </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<!-- TOP NAVBAR -->
+<nav class="navbar navbar-expand-lg cc-navbar sticky-top">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+            <i class="bi bi-building fs-4"></i>
+            <div>
+                <h6 class="mb-0 fw-bold">CampusCare</h6>
+                <small class="d-block" style="font-size: 0.7rem; opacity: 0.8;">College Complaint Portal</small>
+            </div>
+        </a>
+
+        {% if user.is_authenticated %}
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list fs-1 text-white"></i>
+        </button>
+        {% else %}
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list fs-1 text-white"></i>
+        </button>
+        {% endif %}
+
+        <div class="collapse navbar-collapse justify-content-end {% if user.is_authenticated %}d-none d-lg-flex{% endif %}" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                {% if user.is_authenticated %}
+                <li class="nav-item text-white me-3">
+                    <span class="opacity-75">Welcome back, </span><strong>{{ user.username }}</strong>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">
+                        <i class="bi bi-person-circle fs-5"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                            Logout <i class="bi bi-box-arrow-right ms-1"></i>
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item mt-3 mt-lg-0">
+                    <a class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 w-100" href="{% url 'login' %}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% if user.is_authenticated %}
+<!-- SIDEBAR -->
+<div class="offcanvas-lg offcanvas-start cc-sidebar" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header border-bottom d-lg-none">
+        <h5 class="offcanvas-title text-navy"><i class="bi bi-building"></i> CampusCare</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#mobileSidebar" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body flex-column pt-3">
+        <ul class="nav flex-column w-100 mb-auto">
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                    <i class="bi bi-grid-1x2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'create_complaint' %}active{% endif %}" href="{% url 'create_complaint' %}">
+                    <i class="bi bi-plus-circle"></i> Create Complaint
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
+                    <i class="bi bi-file-earmark-text"></i> My Complaints
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'complaint-summary' %}active{% endif %}" href="{% url 'complaint-summary' %}">
+                    <i class="bi bi-bar-chart-line"></i> Analytics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+            </li>
+        </ul>
+        <hr class="d-lg-none">
+        <ul class="nav flex-column w-100 d-lg-none">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'change_password' %}">
+                    <i class="bi bi-key"></i> Change Password
+                </a>
+            </li>
+            <li class="nav-item mt-2">
+                <form action="{% url 'logout' %}" method="post" class="w-100 px-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger w-100 text-start d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<!-- MAIN CONTENT -->
+<main class="{% if user.is_authenticated %}cc-main-content{% else %}cc-main-content-full{% endif %}">
+    
+    <!-- Toast Messages -->
+    {% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3 mt-5">
+        {% for message in messages %}
+            <div class="toast show align-items-center text-white {% if message.tags == 'success' %}bg-success{% elif message.tags == 'error' %}bg-danger{% elif message.tags == 'warning' %}bg-warning{% else %}bg-info{% endif %} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi {% if message.tags == 'success' %}bi-check-circle{% elif message.tags == 'error' %}bi-exclamation-circle{% else %}bi-info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.toast').forEach(t => {
+                t.classList.remove('show');
+            });
+        }, 4000);
+    </script>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="cc-footer mt-auto {% if user.is_authenticated %}cc-footer-auth{% endif %}">
+    <div class="container-fluid px-4">
+        <div class="row gy-4">
+            <div class="col-md-5">
+                <h5 class="d-flex align-items-center gap-2">
+                    <i class="bi bi-building text-teal"></i> CampusCare
+                </h5>
+                <p class="text-muted small mt-2 pe-md-5">
+                    Your voice matters. We help connect students with the right department.
+                    A secure College Complaint Portal enabling students to submit complaints, track their status, and communicate efficiently.
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold">Quick Links</h6>
+                <ul class="list-unstyled small mt-2">
+                    <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="mb-2"><a href="{% url 'create_complaint' %}">Create Complaint</a></li>
+                    <li class="mb-2"><a href="{% url 'profile' %}">Profile</a></li>
+                    {% else %}
+                    <li class="mb-2"><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                    <li class="mb-2"><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold">College Information</h6>
+                <ul class="list-unstyled small text-muted mt-2">
+                    <li class="mb-2"><i class="bi bi-geo-alt-fill me-2 text-teal"></i>XYZ College, Bhubaneswar, Odisha, India</li>
+                    <li class="mb-2"><i class="bi bi-envelope-fill me-2 text-teal"></i>info@xyzcollege.edu.in</li>
+                    <li class="mb-2"><i class="bi bi-telephone-fill me-2 text-teal"></i>+91 98765 43210</li>
+                    <li class="mb-2"><i class="bi bi-clock-fill me-2 text-teal"></i>Mon – Fri : 9:00 AM – 5:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="mt-4 mb-3 border-secondary opacity-25">
+        <div class="text-center small text-muted">
+            &copy; {% now "Y" %} CampusCare | College Complaint Portal | All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+

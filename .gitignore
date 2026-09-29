@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+media/
+staticfiles/
+Complaint_Portal_backup.sql
+db copy.sqlite3
+data.json

@@ -1,0 +1,171 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <div>
+            <h3 class="fw-bold text-navy mb-1">Analytics Dashboard</h3>
+            <p class="text-muted mb-0">Overview of complaints for <strong>{{ branch }} - {{ batch }}</strong></p>
+        </div>
+        <div>
+            <a class="btn btn-outline-secondary rounded-pill" href="javascript:history.back()">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- OVERALL TOTAL -->
+        <div class="col-lg-4">
+            <div class="card stat-card border-0 shadow-sm text-center h-100">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center py-5">
+                    <div class="icon-wrapper mb-3" style="width: 64px; height: 64px; font-size: 2rem; background-color: rgba(15,23,42,0.1); color: var(--primary-navy);">
+                        <i class="bi bi-pie-chart-fill"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Total Complaints</h5>
+                    <h1 class="display-3 fw-bold text-navy mb-0">{{ complaints }}</h1>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CHART -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold text-navy">Complaint Status Distribution</h5>
+                </div>
+                <div class="card-body d-flex justify-content-center align-items-center py-4">
+                    {% if complaints > 0 %}
+                        <img src="{% static 'images/' %}{{ chart_filename }}?v={{ complaints }}" class="img-fluid rounded shadow-sm" alt="Status Chart" style="max-height: 300px;">
+                    {% else %}
+                        <div class="text-center text-muted">
+                            <i class="bi bi-graph-up fs-1 mb-2 d-block"></i>
+                            <p>No data available to generate chart.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORY SUMMARY -->
+    <h4 class="fw-bold text-navy mb-4">Category Breakdown</h4>
+    
+    <div class="row g-4">
+        <!-- ACADEMIC -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-book"></i> Academic</h6>
+                    <span class="badge bg-navy rounded-pill">{{ Academic_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ Academic_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ Academic_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ Academic_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ Academic_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFRASTRUCTURE -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-building"></i> Infrastructure</h6>
+                    <span class="badge bg-navy rounded-pill">{{ Infrastructure_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ Infrastructure_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ Infrastructure_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ Infrastructure_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ Infrastructure_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIBRARY -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-journals"></i> Library</h6>
+                    <span class="badge bg-navy rounded-pill">{{ Library_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ Library_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ Library_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ Library_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ Library_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOSTEL -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-house-door"></i> Hostel</h6>
+                    <span class="badge bg-navy rounded-pill">{{ Hostel_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ Hostel_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ Hostel_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ Hostel_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ Hostel_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSPORT -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-bus-front"></i> Transport</h6>
+                    <span class="badge bg-navy rounded-pill">{{ Transport_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ Transport_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ Transport_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ Transport_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ Transport_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEES & ACCOUNTS -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-teal d-flex align-items-center gap-2"><i class="bi bi-currency-rupee"></i> Fees & Accounts</h6>
+                    <span class="badge bg-navy rounded-pill">{{ FeesandAccounts_total }} Total</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending</span><span class="fw-bold">{{ FeesandAccounts_pending }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-arrow-repeat text-info me-2"></i>In Progress</span><span class="fw-bold">{{ FeesandAccounts_inprogres }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0"><span class="text-muted"><i class="bi bi-check-circle text-success me-2"></i>Resolved</span><span class="fw-bold">{{ FeesandAccounts_resolved }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between px-0 border-0"><span class="text-muted"><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span><span class="fw-bold">{{ FeesandAccounts_rejected }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

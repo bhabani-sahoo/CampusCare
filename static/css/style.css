@@ -1,0 +1,307 @@
+/* =========================================================
+   CAMPUSCARE DESIGN SYSTEM
+   ========================================================= */
+
+:root {
+    --primary-navy: #0F172A;
+    --secondary-teal: #0F766E;
+    --accent-cyan: #06B6D4;
+    --page-bg: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --border-color: #E2E8F0;
+    --success: #16A34A;
+    --warning: #F59E0B;
+    --danger: #DC2626;
+    --info: #2563EB;
+}
+
+body {
+    font-family: 'Inter', 'Poppins', sans-serif;
+    background-color: var(--page-bg);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    color: var(--text-main);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-teal);
+    box-shadow: 0 0 0 0.25rem rgba(15, 118, 110, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--secondary-teal);
+    border-color: var(--secondary-teal);
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    color: white;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #115E59;
+    border-color: #115E59;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background-color: var(--page-bg);
+    color: var(--primary-navy);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    border-radius: 8px;
+    color: white;
+}
+.btn-danger:hover {
+    background-color: #B91C1C;
+    color: white;
+}
+
+.cc-navbar {
+    background-color: var(--primary-navy);
+}
+
+.cc-navbar .navbar-brand, .cc-navbar .nav-link, .cc-navbar .navbar-toggler-icon {
+    color: #ffffff !important;
+}
+
+.cc-navbar .nav-link:hover {
+    color: var(--accent-cyan) !important;
+}
+
+.cc-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid var(--border-color);
+    --bs-offcanvas-width: 250px;
+    z-index: 1045;
+}
+
+@media (min-width: 992px) {
+    .cc-sidebar {
+        position: fixed !important;
+        top: 64px;
+        left: 0;
+        bottom: 0;
+        width: 250px;
+        padding: 1rem 0;
+        transform: none !important;
+        visibility: visible !important;
+    }
+}
+
+.cc-sidebar .nav-link {
+    color: var(--text-main);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cc-sidebar .nav-link:hover {
+    background-color: var(--page-bg);
+    color: var(--secondary-teal);
+}
+
+.cc-sidebar .nav-link.active {
+    background-color: rgba(15, 118, 110, 0.1);
+    color: var(--secondary-teal);
+    border-right: 3px solid var(--secondary-teal);
+}
+
+.cc-main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+.cc-main-content-full {
+    margin-left: 0;
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+@media (max-width: 991.98px) {
+    .cc-main-content {
+        margin-left: 0;
+    }
+}
+
+.stat-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.stat-card .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card.total .icon-wrapper { background-color: rgba(15, 23, 42, 0.1); color: var(--primary-navy); }
+.stat-card.pending .icon-wrapper { background-color: rgba(245, 158, 11, 0.1); color: var(--warning); }
+.stat-card.progress .icon-wrapper { background-color: rgba(37, 99, 235, 0.1); color: var(--info); }
+.stat-card.resolved .icon-wrapper { background-color: rgba(22, 163, 74, 0.1); color: var(--success); }
+.stat-card.rejected .icon-wrapper { background-color: rgba(220, 38, 38, 0.1); color: var(--danger); }
+
+.badge-pending { background-color: rgba(245, 158, 11, 0.1); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+.badge-progress, .badge-in-progress { background-color: rgba(37, 99, 235, 0.1); color: var(--info); border: 1px solid rgba(37, 99, 235, 0.2); }
+.badge-resolved { background-color: rgba(22, 163, 74, 0.1); color: var(--success); border: 1px solid rgba(22, 163, 74, 0.2); }
+.badge-rejected { background-color: rgba(220, 38, 38, 0.1); color: var(--danger); border: 1px solid rgba(220, 38, 38, 0.2); }
+.badge { padding: 0.4em 0.8em; border-radius: 50rem; font-weight: 500; }
+
+.cc-footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+    margin-top: auto;
+    z-index: 1000;
+}
+
+.cc-footer h5 {
+    color: var(--primary-navy);
+    font-weight: 600;
+}
+
+.cc-footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.cc-footer a:hover {
+    color: var(--secondary-teal);
+}
+
+/* Apply margin to footer to avoid sidebar overlap on desktop */
+.cc-footer-auth {
+    margin-left: 250px;
+}
+@media (max-width: 991.98px) {
+    .cc-footer-auth {
+        margin-left: 0;
+    }
+}
+
+.text-navy { color: var(--primary-navy); }
+.text-teal { color: var(--secondary-teal); }
+.text-cyan { color: var(--accent-cyan); }
+.bg-navy { background-color: var(--primary-navy); }
+.bg-teal { background-color: var(--secondary-teal); }
+.bg-page { background-color: var(--page-bg); }
+
+.auth-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 575.98px) {
+    .auth-card {
+        padding: 1.5rem !important;
+    }
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background-color: var(--secondary-teal);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: var(--secondary-teal);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #115E59;
+}
+
+/* Apply form-control styles to raw inputs rendered by Django forms */
+input[type="text"], input[type="email"], input[type="password"], textarea, select {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-main);
+    background-color: var(--card-bg);
+    background-clip: padding-box;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+    border-color: var(--secondary-teal);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(15, 118, 110, 0.25);
+}
+
+textarea {
+    min-height: 120px;
+}
+
+.toast-container {
+    z-index: 1060;
+}
+
+.hero-wrapper {
+    display: flex;
+    align-items: center;
+    min-height: 70vh;
+}
